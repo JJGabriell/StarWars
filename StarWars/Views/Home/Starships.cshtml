@@ -1,0 +1,74 @@
+﻿@using StarWars.Models
+@model IEnumerable<Starship>
+@{
+    ViewBag.Title = "Starships";
+}
+
+<main class="mainTabela">
+    <div class="page-title">
+        <h1>@ViewBag.Title</h1>
+    </div>
+    <div id="table">
+        <table class="table tg">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Model</th>
+                    <th>Class</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    string obj = Json.Encode(item);
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Model)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.StarshipClass)
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-light" onclick="details('@obj')" data-bs-toggle="tooltip" data-bs-title="Open Details"><i class="bi bi-arrow-right-circle-fill"></i></button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</main>
+
+@section scripts {
+    <script type="text/javascript">
+
+    function details(data) {
+      if (typeof (data) == "string")
+        data = JSON.parse(data.replaceAll("\r", "").replaceAll("\n", "<br/>"));
+
+        const dados = [
+        ["Model", data.Model],
+        ["Starship Class", data.StarshipClass],
+        ["Manufacturer", data.Manufacturer],
+        ["Cost", numberWithUnit(data.CostInCredits, "credits")],
+        ["Length", numberWithUnit(data.Length, "m")],
+        ["Crew", data.Crew],
+        ["Passengers", data.Passengers],
+        ["Max. Atmosphering Speed", numberWithUnit(data.MaxAtmospheringSpeed, "Km/h")],
+        ["Hyperdrive Rating", data.HyperdriveRating],
+        ["Mega Lights", data.MegaLights],
+        ["Cargo Capacity", numberWithUnit(data.CargoCapacity, "Kg")],
+        ["Consumables", data.Consumables],
+        ["Films", data.Films.length],
+        ["Pilots", data.Pilots.length],
+      ];
+
+        abrirModalDetails("Name: " + data.Name, dados);
+    }
+
+    </script>
+}
+

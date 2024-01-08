@@ -1,0 +1,80 @@
+﻿@using StarWars.Models
+
+@model IEnumerable<Film>
+@{
+    ViewBag.Title = "Films";
+}
+
+<main class="mainTabela">
+
+    <div class="page-title">
+        <h1>@ViewBag.Title</h1>
+    </div>
+    <div id="table">
+        <table class="table tg">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Episode</th>
+                    <th>Directed By</th>
+                    <th>Release Date</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    string obj = Json.Encode(item);
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Title)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.EpisodeId)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Director)
+                        </td>
+                        <td>
+                            @Html.Raw(item.ReleaseDate)
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-light" onclick="details('@obj')" data-bs-toggle="tooltip" data-bs-title="Abrir Detalhes"><i class="bi bi-info-circle-fill"></i></button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</main>
+
+@section scripts {
+    <script type="text/javascript">
+
+    function details(data) {
+      if (typeof (data) == "string")
+        data = JSON.parse(data.replaceAll("\r", "").replaceAll("\n", "<br/>"));
+
+        //let peoples = "";
+        
+        //for (let i = 0; i < data.Characters.length; i++) {
+        //    peoples += getPeopleName(data.Characters[i]) + " ";
+        //}
+
+      const dados = [
+        ["Episode", data.EpisodeId],
+        ["Release Date", data.ReleaseDate],
+        ["Director", data.Director],
+        ["Producer", data.Producer],
+        ["Opening", data.OpeningCrawl],
+        ["Characters", data.Characters.length],
+        ["Planets", data.Planets.length],
+        ["Species", data.Species.length],
+        ["Starships", data.Starships.length],
+        ["Vehicles", data.Vehicles.length]
+      ];
+
+        abrirModalDetails("Star Wars: " + data.Title, dados);
+    }
+    </script>
+}
